@@ -4,12 +4,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 
 from data import load_data
 from features import create_market_features, run_pca, run_clustering, summarize_clusters
 
 
 def export_dashboard():
+    project_dir = Path(__file__).resolve().parent
     returns = load_data()
     print("Computing market features, PCA and regimes...")
     features = create_market_features(returns)
@@ -29,6 +31,29 @@ def export_dashboard():
     monthly_index = market_index.resample('ME').ohlc().dropna()
     market_chart = [{'date': date.strftime('%Y-%m-%d'), **row.round(4).to_dict()}
                     for date, row in monthly_index.iterrows()]
+    comparison_dir = project_dir / 'results' / 'comparisons'
+    performance_file = comparison_dir / 'final_performance_summary.csv'
+    backtest_file = comparison_dir / 'backtest_returns.csv'
+    adaptive_file = comparison_dir / 'adaptive_history.csv'
+    required_outputs = [performance_file, backtest_file, adaptive_file]
+    if any(not path.is_file() for path in required_outputs):
+        raise FileNotFoundError(
+            'Backtest outputs are missing. Run python main.py before '
+            'python export_dashboard.py.'
+        )
+    performance_frame = pd.read_csv(performance_file)
+    backtest_frame = pd.read_csv(backtest_file, index_col=0, parse_dates=True)
+    adaptive_frame = pd.read_csv(adaptive_file)
+    performance = [{
+        'strategy': row['Strategy'],
+        'annualReturn': float(row['Annual Return']),
+        'annualVolatility': float(row['Annual Volatility']),
+        'sharpeRatio': float(row['Sharpe Ratio']),
+        'maxDrawdown': float(row['Max Drawdown']),
+        'averageTurnover': float(row['Average Turnover']),
+        'costProxy': float(row['Cost Proxy']),
+        'finalValue': float(row['Final Value']),
+    } for _, row in performance_frame.iterrows()]
     payload = {
         'generatedAt': datetime.now(timezone.utc).isoformat(),
         'source': 'Kenneth French Data Library · 30 Industry Portfolios · Daily',
@@ -40,6 +65,14 @@ def export_dashboard():
         'warmupRows': len(returns) - len(clusters),
         'series': series,
         'marketChart': market_chart,
+        'performance': performance,
+        'backtest': {
+            'observations': len(backtest_frame),
+            'startDate': str(backtest_frame.index.min().date()),
+            'endDate': str(backtest_frame.index.max().date()),
+            'rebalances': len(adaptive_frame),
+            'transactionCost': 0.001,
+        },
         'pca': [{'name': name, 'variance': float(explained[name] * 100),
                  'cumulative': float(cumulative[name] * 100)} for name in explained.index],
         'clusters': [{'id': int(key), 'count': int(counts[key]),
@@ -50,7 +83,7 @@ def export_dashboard():
                      'cluster': int(clusters.loc[date, 'cluster']),
                      'date': str(date.date())} for date in clusters.index[::20]],
     }
-    target = Path(__file__).resolve().parent / 'dashboard/public/data/dashboard.json'
+    target = project_dir / 'dashboard/public/data/dashboard.json'
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(payload, allow_nan=False, separators=(',', ':'),
                                  default=lambda v: v.item() if isinstance(v, np.generic) else v),

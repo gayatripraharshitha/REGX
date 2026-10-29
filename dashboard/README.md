@@ -24,7 +24,9 @@ to static cards; no pinned scroll sequence is required in that mode.
 The first-screen primary action is **Scroll to explore**. Dashboard entry follows
 the research story, in the workspace preview. The workspace has a collapsible
 top menu with Overview, Market features, PCA analysis, Market regimes, Industry
-connections, and About RegX. The labeled correlation matrix has its own page,
+connections, Portfolio results, and About RegX. Portfolio results presents the
+seven-strategy out-of-sample summary without adding a second analytics system.
+The labeled correlation matrix has its own page,
 with a persistent selected-pair value, horizontal scrolling on smaller screens,
 and touch/keyboard interaction. About includes the project repository link.
 
@@ -48,19 +50,22 @@ Node.js 22.12+ or 24 LTS is recommended.
 ## Refresh the research snapshot
 
 The checked-in `public/data/dashboard.json` allows the website to work without a
-Python server. To refresh it, run from `RegX`, before building:
+Python server. Refresh the research outputs first, then export the snapshot from
+`RegX` before building:
 
 ```powershell
+.\.venv\Scripts\python.exe main.py
 .\.venv\Scripts\python.exe export_dashboard.py
 ```
 
 This invokes `load_data`, `create_market_features`, `run_pca`, `run_clustering`,
-and `summarize_clusters` from the existing Python modules. It does not run the
-portfolio backtest. Calculations use all daily rows; time charts display the last
+and `summarize_clusters` from the existing Python modules, then reads the saved
+backtest summary produced by `main.py`. Calculations use all daily rows; time charts display the last
 available observation of each month. Volatility is daily standard deviation in
 percent, not annualized. Correlation matrix uses full-history daily returns.
 Regime counts use all eligible days, not monthly chart samples. Initial rolling
-feature warm-up rows are excluded. Model fits are full-sample descriptive analysis.
+feature warm-up rows are excluded. The exploratory PCA/regime panels use
+full-sample descriptive fits; the Method B backtest fit remains pre-test only.
 
 Recomputed PCA/cluster results are authoritative; they can differ from manually
 copied figures or change after dataset/library updates. Cluster IDs have no
@@ -92,9 +97,10 @@ npm.cmd run preview
 ```
 
 Verify navigation, metric/date filters, hover tooltips, theme toggle, CSV export,
-snapshot download, industry search, and narrow-screen navigation. Exports follow
-the selected chart date range. PCA, regime counts, and the correlation matrix
-always describe the full historical dataset.
+snapshot download, portfolio results, industry search, and narrow-screen navigation.
+Feature exports follow the selected chart date range; Portfolio results exports
+the seven-strategy summary. PCA, regime counts, and the correlation matrix always
+describe the full historical dataset.
 
 Watermelon UI uses copy-in source, not an installed `watermelon-ui` runtime
 package. See `THIRD_PARTY_NOTICES.md`. “Motion AI UI” was interpreted as Motion

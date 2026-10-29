@@ -195,7 +195,8 @@ in `figures/performance/`.
 
 The dashboard is a static React and Vite application backed by the checked-in
 snapshot at `dashboard/public/data/dashboard.json`. It does not require a Python
-server.
+server. Its workspace covers market features, PCA, regimes, the seven-strategy
+portfolio comparison, and industry correlations in one consistent interface.
 
 ```powershell
 cd dashboard
