@@ -173,31 +173,24 @@ def method_a_alpha(feature_row):
 # CLUSTER-GUIDED ADAPTATION
 # ============================================================
 
-def method_b_alpha(cluster):
+def method_b_alpha(cluster, alpha_map=None):
     """
-    Uses the detected market cluster
-    to determine alpha.
+    Returns alpha according to the market regime.
 
-    Based on our current cluster analysis:
-
-    Cluster 0 -> strongest stress/change
-    Cluster 1 -> calmer regime
-    Cluster 2 -> higher correlation,
-                 moderate volatility
+    alpha_map should be determined from the
+    characteristics of the fitted clusters.
     """
 
-    alpha_map = {
+    if alpha_map is None:
+        alpha_map = {
+            0: 0.75,
+            1: 0.30,
+            2: 0.50
+        }
 
-        0: 0.75,
-
-        1: 0.30,
-
-        2: 0.50
-    }
-
-    return alpha_map[
-        int(cluster)
-    ]
+    return float(
+        alpha_map[int(cluster)]
+    )
 
 
 # ============================================================

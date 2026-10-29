@@ -1,34 +1,108 @@
 from data import load_data
-from features import create_market_features
+from features import (
+    create_market_features,
+    run_pca
+)
 from backtest import run_backtest
 from evaluation import evaluate_results
 
 
 def main():
 
-    print("=" * 60)
-    print("RegX - Regime-Aware Portfolio Risk System")
-    print("=" * 60)
+    print("\n" + "=" * 65)
+    print("REGX")
+    print("Regime-Aware Portfolio Risk Analysis")
+    print("=" * 65)
 
-    # Step 1: Load and clean data
+    # ========================================================
+    # STEP 1 - DATA
+    # ========================================================
+
+    print("\n[1/5] Loading and cleaning data...")
+
     returns = load_data()
 
-    print("\nDataset loaded successfully.")
-    print("Shape:", returns.shape)
+    # ========================================================
+    # STEP 2 - MARKET FEATURES
+    # ========================================================
 
-    # Step 2: Market analysis
-    features = create_market_features(returns)
+    print("\n[2/5] Analysing market conditions...")
 
-    print("\nMarket features generated.")
-    print(features.tail())
+    features = create_market_features(
+        returns
+    )
 
-    # Step 3: Run complete backtest
-    results = run_backtest(returns)
+    print(
+        "Market features created:",
+        features.shape[1]
+    )
 
-    # Step 4: Evaluate results
-    evaluate_results(results)
+    # ========================================================
+    # STEP 3 - PCA
+    # ========================================================
 
-    print("\nRegX experiment completed.")
+    print("\n[3/5] Running PCA analysis...")
+
+    (
+        pca_data,
+        explained_variance,
+        cumulative_variance,
+        pca_model,
+        pca_scaler
+    ) = run_pca(
+        returns,
+        n_components=5
+    )
+
+    print(
+        "PC1 explained variance:",
+        f"{explained_variance.iloc[0] * 100:.2f}%"
+    )
+
+    print(
+        "First 5 PCs explained variance:",
+        f"{cumulative_variance.iloc[-1] * 100:.2f}%"
+    )
+
+    # ========================================================
+    # STEP 4 - BACKTEST
+    # ========================================================
+
+    print("\n[4/5] Running walk-forward backtest...")
+
+    (
+        results,
+        turnover,
+        adaptive_history
+    ) = run_backtest(
+        returns
+    )
+
+    # ========================================================
+    # STEP 5 - EVALUATION
+    # ========================================================
+
+    print("\n[5/5] Evaluating strategies...")
+
+    summary = evaluate_results(
+        results,
+        turnover,
+        adaptive_history
+    )
+
+    print("\n" + "=" * 65)
+    print("REGX COMPLETE")
+    print("=" * 65)
+
+    print(
+        "\nFinal results saved in:"
+        "\nresults/comparisons/"
+    )
+
+    print(
+        "\nCharts saved in:"
+        "\nfigures/performance/"
+    )
 
 
 if __name__ == "__main__":

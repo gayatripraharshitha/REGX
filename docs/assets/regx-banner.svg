@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="420" viewBox="0 0 1440 420" role="img" aria-labelledby="title desc">
+  <title id="title">RegX — Regime-Aware Portfolio Risk Analysis</title>
+  <desc id="desc">A restrained financial research banner with a rising market line, candlesticks, and regime bands.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b100d"/>
+      <stop offset="0.55" stop-color="#111a16"/>
+      <stop offset="1" stop-color="#16231c"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#789b86"/>
+      <stop offset="1" stop-color="#b6d3bf"/>
+    </linearGradient>
+    <linearGradient id="fade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9bbda8" stop-opacity="0.24"/>
+      <stop offset="1" stop-color="#9bbda8" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1440" height="420" rx="28" fill="url(#background)"/>
+  <g opacity="0.42" stroke="#53645a" stroke-width="1">
+    <path d="M0 84H1440M0 168H1440M0 252H1440M0 336H1440"/>
+    <path d="M180 0V420M360 0V420M540 0V420M720 0V420M900 0V420M1080 0V420M1260 0V420"/>
+  </g>
+
+  <g opacity="0.22">
+    <rect x="780" y="0" width="160" height="420" fill="#8ba498"/>
+    <rect x="940" y="0" width="230" height="420" fill="#78918b"/>
+    <rect x="1170" y="0" width="270" height="420" fill="#9bbda8"/>
+  </g>
+
+  <path d="M690 314 C760 302 800 266 854 273 C910 280 932 224 988 235 C1045 246 1078 184 1134 199 C1185 212 1230 134 1286 151 C1330 164 1366 112 1440 84 L1440 420 L690 420 Z" fill="url(#fade)"/>
+  <path d="M690 314 C760 302 800 266 854 273 C910 280 932 224 988 235 C1045 246 1078 184 1134 199 C1185 212 1230 134 1286 151 C1330 164 1366 112 1440 84" fill="none" stroke="url(#line)" stroke-width="4" stroke-linecap="round" filter="url(#glow)"/>
+
+  <g stroke-width="2">
+    <g stroke="#8fb09b" fill="#789b86"><path d="M775 252V329"/><rect x="768" y="273" width="14" height="31" rx="2"/></g>
+    <g stroke="#b18e98" fill="#8e6f78"><path d="M830 235V305"/><rect x="823" y="252" width="14" height="35" rx="2"/></g>
+    <g stroke="#8fb09b" fill="#789b86"><path d="M885 223V289"/><rect x="878" y="239" width="14" height="28" rx="2"/></g>
+    <g stroke="#8fb09b" fill="#789b86"><path d="M940 205V270"/><rect x="933" y="224" width="14" height="29" rx="2"/></g>
+    <g stroke="#b18e98" fill="#8e6f78"><path d="M995 198V259"/><rect x="988" y="218" width="14" height="25" rx="2"/></g>
+    <g stroke="#8fb09b" fill="#789b86"><path d="M1050 170V238"/><rect x="1043" y="192" width="14" height="30" rx="2"/></g>
+    <g stroke="#8fb09b" fill="#789b86"><path d="M1105 152V215"/><rect x="1098" y="171" width="14" height="27" rx="2"/></g>
+    <g stroke="#b18e98" fill="#8e6f78"><path d="M1160 145V211"/><rect x="1153" y="165" width="14" height="29" rx="2"/></g>
+    <g stroke="#8fb09b" fill="#789b86"><path d="M1215 119V183"/><rect x="1208" y="137" width="14" height="29" rx="2"/></g>
+    <g stroke="#8fb09b" fill="#789b86"><path d="M1270 102V165"/><rect x="1263" y="121" width="14" height="27" rx="2"/></g>
+    <g stroke="#b18e98" fill="#8e6f78"><path d="M1325 94V155"/><rect x="1318" y="111" width="14" height="28" rx="2"/></g>
+    <g stroke="#8fb09b" fill="#789b86"><path d="M1380 64V129"/><rect x="1373" y="84" width="14" height="28" rx="2"/></g>
+  </g>
+
+  <g font-family="Inter, Segoe UI, Arial, sans-serif" fill="#edf3ef">
+    <text x="82" y="126" font-size="24" letter-spacing="8" fill="#9bbda8">REGX</text>
+    <text x="78" y="205" font-size="54" font-weight="650">Regime-aware risk,</text>
+    <text x="78" y="267" font-size="54" font-weight="650">measured honestly.</text>
+    <text x="82" y="320" font-size="19" fill="#a6b3ab">PCA · clustering · adaptive covariance · walk-forward evaluation</text>
+  </g>
+  <rect x="78" y="358" width="218" height="34" rx="17" fill="#9bbda8" fill-opacity="0.12" stroke="#9bbda8" stroke-opacity="0.55"/>
+  <text x="100" y="381" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" letter-spacing="1.5" fill="#c6d8cc">30 INDUSTRY PORTFOLIOS</text>
+</svg>

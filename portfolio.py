@@ -33,31 +33,47 @@ def minimum_variance_portfolio(
 
     n_assets = covariance.shape[0]
 
+    # Equal-weight feasible starting point
     initial_weights = np.repeat(
         1 / n_assets,
         n_assets
     )
 
-    # Scale objective for numerical stability
-    SCALE = 1_000_000
+    # Smaller scaling for numerical stability
+    SCALE = 10_000
 
+    scaled_covariance = (
+        covariance * SCALE
+    )
+
+    # Objective
     def portfolio_variance(weights):
 
-        variance = (
+        return (
             weights.T
-            @ covariance
+            @ scaled_covariance
             @ weights
         )
 
-        return SCALE * variance
+    # Gradient of w'Σw = 2Σw
+    def gradient(weights):
 
+        return (
+            2
+            * scaled_covariance
+            @ weights
+        )
+
+    # Weights must sum to 1
     constraints = {
         "type": "eq",
-        "fun": lambda w: np.sum(w) - 1
+        "fun": lambda w: np.sum(w) - 1,
+        "jac": lambda w: np.ones(n_assets)
     }
 
+    # Long-only + 10% maximum
     bounds = [
-        (0, max_weight)
+        (0.0, max_weight)
         for _ in range(n_assets)
     ]
 
@@ -65,20 +81,25 @@ def minimum_variance_portfolio(
         portfolio_variance,
         initial_weights,
         method="SLSQP",
+        jac=gradient,
         bounds=bounds,
         constraints=constraints,
         options={
-            "ftol": 1e-12,
-            "maxiter": 1000
+            "ftol": 1e-10,
+            "maxiter": 2000,
+            "disp": False
         }
     )
 
     if not result.success:
 
-        raise RuntimeError(
-            "Portfolio optimisation failed: "
-            + result.message
+        print(
+            "Warning:",
+            result.message
         )
+
+        # Safe fallback
+        return initial_weights
 
     return result.x
 
